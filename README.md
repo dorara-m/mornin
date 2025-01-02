@@ -1,3 +1,17 @@
+# 朝活ポイントアプリ「もーにん」
+## 仕様
+- 毎日、朝にできた項目を記録することでポイント（自己申告で点数決まる、1: 普通 2: えらい 3:めっちゃえらい）を貯め、自分のレベルが上がるアプリ。
+- ポイントがたまるUI、レベルが上がるUIを可愛くする。
+- 過去のログ（何をして何ポイント稼いだか）がリストで見れる。
+
+## todo
+- [ ] アプリのデザイン
+- [ ] ポイント入力UI
+- [ ] ポイント貯まるゲージ、レベル表示UI
+- [ ] ポイントログ表示UI
+- [ ] ログイン機能（めちゃめちゃ簡単にやるとしたら何がいいか、勉強になる→しんどくなったらlocalstorage）
+
+↓↓↓デフォルト記述
 # Getting Started with Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).

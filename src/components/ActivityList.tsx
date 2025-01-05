@@ -14,17 +14,25 @@ const ListItem = styled.li`
   padding: 0.5rem;
   border: 1px solid #ddd;
   border-radius: 4px;
+  span {
+    font-size: 0.8rem;
+    color: #666;
+    margin-right: 0.5rem;
+  }
 `;
 
 type Props = {
-  activities: string[];
+  activities: { text: string; timeStamp: string }[];
 };
 
 const ActivityList: React.FC<Props> = ({ activities }) => {
   return (
     <ListContainer>
       {activities.map((activity, index) => (
-        <ListItem key={index}>{activity}</ListItem>
+        <ListItem key={index}>
+          <span>{activity.timeStamp}</span>
+          {activity.text}
+        </ListItem>
       ))}
     </ListContainer>
   );

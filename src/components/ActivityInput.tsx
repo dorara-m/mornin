@@ -29,7 +29,7 @@ const Button = styled.button`
 `;
 
 type Props = {
-  onAddActivity: (activity: string) => void;
+  onAddActivity: (text: string, timeStamp: Date) => void;
 };
 
 const ActivityInput: React.FC<Props> = ({ onAddActivity }) => {
@@ -37,7 +37,7 @@ const ActivityInput: React.FC<Props> = ({ onAddActivity }) => {
 
   const handleAddClick = () => {
     if (inputValue.trim() !== "") {
-      onAddActivity(inputValue);
+      onAddActivity(inputValue, new Date());
       setInputValue("");
     }
   };

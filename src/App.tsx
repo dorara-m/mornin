@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from "react";
-import styled, { keyframes } from "styled-components";
+import React, { useState } from "react";
+import styled from "styled-components";
 import Confetti from "canvas-confetti";
 import Header from "./components/Header";
 import ActivityInput from "./components/ActivityInput";
@@ -37,7 +37,9 @@ const BurstEffect = styled.div<{ visible: boolean }>`
 `;
 
 const App: React.FC = () => {
-  const [activities, setActivities] = useState<string[]>([]);
+  const [activities, setActivities] = useState<
+    { text: string; timeStamp: string }[]
+  >([]);
   const [progress, setProgress] = useState<number>(0);
   const [level, setLevel] = useState<number>(0);
   const [animate, setAnimate] = useState<boolean>(false);
@@ -47,7 +49,15 @@ const App: React.FC = () => {
     return 5 + level; // レベル0で5、レベル1で6...
   };
 
-  const handleAddActivity = (activity: string) => {
+  const formatDate = (date: Date): string => {
+    const month = date.getMonth() + 1; // 月は0から始まるため+1
+    const day = date.getDate();
+    const hours = date.getHours();
+    const minutes = date.getMinutes().toString().padStart(2, "0"); // 2桁に揃える
+    return `${month}/${day} ${hours}:${minutes}`;
+  };
+
+  const handleAddActivity = (text: string, timeStamp: Date) => {
     const maxProgress = getMaxProgress(level);
 
     if (progress + 1 >= maxProgress) {
@@ -71,12 +81,12 @@ const App: React.FC = () => {
       setProgress(progress + 1); // 達成度を増加
     }
 
-    setActivities([...activities, activity]);
+    const activity = { text: text, timeStamp: formatDate(timeStamp) };
+
+    setActivities([activity, ...activities]);
   };
 
   const triggerConfetti = () => {
-    const duration = 5000; // 動作時間（ミリ秒）
-
     const defaults = {
       origin: { y: 0.7 }, // どの位置から confetti を出すか
     };

@@ -38,9 +38,9 @@ const BurstEffect = styled.div<{ visible: boolean }>`
 
 const App: React.FC = () => {
   const [activities, setActivities] = useState<
-    { text: string; timeStamp: string }[]
+    { text: string; progress: number; timeStamp: string }[]
   >([]);
-  const [progress, setProgress] = useState<number>(0);
+  const [displayProgress, setDisplayProgress] = useState<number>(0);
   const [level, setLevel] = useState<number>(0);
   const [animate, setAnimate] = useState<boolean>(false);
   const [burstVisible, setBurstVisible] = useState<boolean>(false);
@@ -49,6 +49,7 @@ const App: React.FC = () => {
     return 5 + level; // レベル0で5、レベル1で6...
   };
 
+  // 日付をフォーマットする関数
   const formatDate = (date: Date): string => {
     const month = date.getMonth() + 1; // 月は0から始まるため+1
     const day = date.getDate();
@@ -57,13 +58,17 @@ const App: React.FC = () => {
     return `${month}/${day} ${hours}:${minutes}`;
   };
 
-  const handleAddActivity = (text: string, timeStamp: Date) => {
+  const handleAddActivity = (
+    text: string,
+    progress: number,
+    timeStamp: Date
+  ) => {
     const maxProgress = getMaxProgress(level);
 
-    if (progress + 1 >= maxProgress) {
-      // レベルアップ処理
-      setProgress(0); // 達成度をリセット
-      setLevel(level + 1);
+    if (displayProgress + progress >= maxProgress) {
+      // 進捗度がmaxを超えたとき = レベルアップしたとき
+      setDisplayProgress(0); // 表示上の進捗をリセット
+      setLevel(level + 1); // レベルを1つ上げる
 
       // アニメーションとconfettiをトリガー
       setAnimate(true);
@@ -78,10 +83,16 @@ const App: React.FC = () => {
         setBurstVisible(false);
       }, 1000);
     } else {
-      setProgress(progress + 1); // 達成度を増加
+      // レベルアップしていないとき → いつも通り進捗を加算
+      setDisplayProgress(displayProgress + progress);
     }
 
-    const activity = { text: text, timeStamp: formatDate(timeStamp) };
+    // このタイミングで日付をフォーマットしてactivitiesに追加
+    const activity = {
+      text: text,
+      progress: progress,
+      timeStamp: formatDate(timeStamp),
+    };
 
     setActivities([activity, ...activities]);
   };
@@ -102,10 +113,10 @@ const App: React.FC = () => {
       <Header />
       <LevelContainer>
         <BurstEffect visible={burstVisible} />
-        <LevelText animate={animate}>レベル: {level}</LevelText>
+        <LevelText animate={animate}>Lv.{level}</LevelText>
       </LevelContainer>
       <ActivityInput onAddActivity={handleAddActivity} />
-      <ProgressBar progress={(progress / getMaxProgress(level)) * 100} />
+      <ProgressBar progress={(displayProgress / getMaxProgress(level)) * 100} />
       <ActivityList activities={activities} />
     </div>
   );

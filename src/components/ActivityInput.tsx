@@ -3,24 +3,38 @@ import styled from "styled-components";
 
 const InputContainer = styled.div`
   display: flex;
-  justify-content: center;
-  margin: 1rem 0;
+  flex-direction: column;
+  align-items: center;
+  margin: 20px;
 `;
 
-const Input = styled.input`
-  padding: 0.5rem;
+const TextInput = styled.input`
+  padding: 10px;
+  font-size: 1rem;
+  margin-bottom: 10px;
+  width: 100%;
+  max-width: 400px;
   border: 1px solid #ccc;
-  border-radius: 4px;
-  margin-right: 0.5rem;
-  width: 70%;
+  border-radius: 5px;
+`;
+
+const NumberInput = styled.input`
+  padding: 10px;
+  font-size: 1rem;
+  margin-bottom: 10px;
+  width: 100%;
+  max-width: 400px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
 `;
 
 const Button = styled.button`
-  padding: 0.5rem 1rem;
+  padding: 10px 20px;
+  font-size: 1rem;
   background-color: #4caf50;
   color: white;
   border: none;
-  border-radius: 4px;
+  border-radius: 5px;
   cursor: pointer;
 
   &:hover {
@@ -28,29 +42,37 @@ const Button = styled.button`
   }
 `;
 
-type Props = {
-  onAddActivity: (text: string, timeStamp: Date) => void;
-};
+interface ActivityInputProps {
+  onAddActivity: (activity: string, progress: number, date: Date) => void;
+}
 
-const ActivityInput: React.FC<Props> = ({ onAddActivity }) => {
-  const [inputValue, setInputValue] = useState("");
+const ActivityInput: React.FC<ActivityInputProps> = ({ onAddActivity }) => {
+  const [activity, setActivity] = useState<string>("");
+  const [progress, setProgress] = useState<number>(1);
 
-  const handleAddClick = () => {
-    if (inputValue.trim() !== "") {
-      onAddActivity(inputValue, new Date());
-      setInputValue("");
-    }
+  const handleSubmit = () => {
+    if (activity.trim() === "" || progress <= 0) return;
+    onAddActivity(activity, progress, new Date());
+    setActivity("");
+    setProgress(1);
   };
 
   return (
     <InputContainer>
-      <Input
+      <TextInput
         type="text"
-        value={inputValue}
-        onChange={(e) => setInputValue(e.target.value)}
+        value={activity}
+        onChange={(e) => setActivity(e.target.value)}
         placeholder="朝活内容を入力..."
       />
-      <Button onClick={handleAddClick}>追加</Button>
+      <NumberInput
+        type="number"
+        value={progress}
+        onChange={(e) => setProgress(Number(e.target.value))}
+        placeholder="進捗度を入力..."
+        min="1"
+      />
+      <Button onClick={handleSubmit}>送信</Button>
     </InputContainer>
   );
 };

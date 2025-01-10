@@ -12,17 +12,25 @@ const ListItem = styled.li`
   background-color: #f9f9f9;
   margin: 0.5rem 0;
   padding: 0.5rem;
+  font-size: 1.1rem;
   border: 1px solid #ddd;
   border-radius: 4px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
   span {
     font-size: 0.8rem;
-    color: #666;
-    margin-right: 0.5rem;
+    margin-right: 2rem;
   }
+`;
+const ListItemProgress = styled.span`
+  font-size: 0.8rem;
+  font-weight: bold;
+  color: green;
 `;
 
 type Props = {
-  activities: { text: string; timeStamp: string }[];
+  activities: { text: string; progress: number; timeStamp: string }[];
 };
 
 const ActivityList: React.FC<Props> = ({ activities }) => {
@@ -30,8 +38,11 @@ const ActivityList: React.FC<Props> = ({ activities }) => {
     <ListContainer>
       {activities.map((activity, index) => (
         <ListItem key={index}>
-          <span>{activity.timeStamp}</span>
-          {activity.text}
+          <div>
+            <span>{activity.timeStamp}</span>
+            {activity.text}
+          </div>
+          <ListItemProgress>{activity.progress}P</ListItemProgress>
         </ListItem>
       ))}
     </ListContainer>

@@ -10,7 +10,7 @@ const HeaderContainer = styled.header`
 `;
 
 const Header: React.FC = () => {
-  return <HeaderContainer>朝活アプリ</HeaderContainer>;
+  return <HeaderContainer>朝活アプリ「もーにん」</HeaderContainer>;
 };
 
 export default Header;

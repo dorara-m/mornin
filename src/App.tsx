@@ -87,19 +87,13 @@ const App: React.FC = () => {
   };
 
   const triggerConfetti = () => {
-    const defaults = {
-      origin: { y: 0.7 }, // どの位置から confetti を出すか
-    };
-
     Confetti({
-      ...defaults,
+      origin: { y: 0.7 },
       particleCount: 100, // Confettiの数
       spread: 70, // 広がり
       startVelocity: 30, // 初速
       gravity: 1, // 落下の速度
-      shapes: ["circle", "square"], // 形の種類
       scalar: 1.2, // 形のスケール
-      colors: ["#ff0000", "#00ff00", "#0000ff"], // 色のバリエーション
     });
   };
 

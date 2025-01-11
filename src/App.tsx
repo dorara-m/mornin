@@ -41,12 +41,12 @@ const App: React.FC = () => {
     { text: string; progress: number; timeStamp: string }[]
   >([]);
   const [displayProgress, setDisplayProgress] = useState<number>(0);
-  const [level, setLevel] = useState<number>(0);
+  const [level, setLevel] = useState<number>(1);
   const [animate, setAnimate] = useState<boolean>(false);
   const [burstVisible, setBurstVisible] = useState<boolean>(false);
 
   const getMaxProgress = (level: number): number => {
-    return 5 + level; // レベル0で5、レベル1で6...
+    return 4 + level; // レベル1で5、レベル2で6...
   };
 
   // 日付をフォーマットする関数
@@ -67,7 +67,7 @@ const App: React.FC = () => {
 
     if (displayProgress + progress >= maxProgress) {
       // 進捗度がmaxを超えたとき = レベルアップしたとき
-      setDisplayProgress(0); // 表示上の進捗をリセット
+      setDisplayProgress(displayProgress + progress - maxProgress); // 表示上の進捗を調整（次のレベルに持ち越す）
       setLevel(level + 1); // レベルを1つ上げる
 
       // アニメーションとconfettiをトリガー

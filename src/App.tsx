@@ -15,14 +15,11 @@ const LevelContainer = styled.div`
   position: relative;
 `;
 
-const LevelText = styled.div<{ animate: boolean }>`
+const LevelText = styled.div`
   font-size: 5rem;
   font-weight: bold;
   color: #4caf50;
   position: relative;
-  transition: transform 0.5s ease;
-  transform: ${(props) =>
-    props.animate ? "translateY(-50px)" : "translateY(0)"};
 `;
 
 const BurstEffect = styled.div<{ visible: boolean }>`
@@ -42,7 +39,7 @@ const App: React.FC = () => {
   >([]);
   const [displayProgress, setDisplayProgress] = useState<number>(0);
   const [level, setLevel] = useState<number>(1);
-  const [animate, setAnimate] = useState<boolean>(false);
+  // const [animate, setAnimate] = useState<boolean>(false);
   const [burstVisible, setBurstVisible] = useState<boolean>(false);
 
   const getMaxProgress = (level: number): number => {
@@ -71,13 +68,13 @@ const App: React.FC = () => {
       setLevel(level + 1); // レベルを1つ上げる
 
       // アニメーションとconfettiをトリガー
-      setAnimate(true);
+      // setAnimate(true);
       setBurstVisible(true);
       triggerConfetti();
 
-      setTimeout(() => {
-        setAnimate(false);
-      }, 500);
+      // setTimeout(() => {
+      //   setAnimate(false);
+      // }, 500);
 
       setTimeout(() => {
         setBurstVisible(false);
@@ -100,8 +97,8 @@ const App: React.FC = () => {
   const triggerConfetti = () => {
     Confetti({
       origin: { y: 0.7 },
-      particleCount: 100, // Confettiの数
-      spread: 70, // 広がり
+      particleCount: 150, // Confettiの数
+      spread: 100, // 広がり
       startVelocity: 30, // 初速
       gravity: 1, // 落下の速度
       scalar: 1.2, // 形のスケール
@@ -113,7 +110,7 @@ const App: React.FC = () => {
       <Header />
       <LevelContainer>
         <BurstEffect visible={burstVisible} />
-        <LevelText animate={animate}>Lv.{level}</LevelText>
+        <LevelText>Lv.{level}</LevelText>
       </LevelContainer>
       <ActivityInput onAddActivity={handleAddActivity} />
       <ProgressBar progress={(displayProgress / getMaxProgress(level)) * 100} />

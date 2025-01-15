@@ -30,16 +30,25 @@ const ListItemProgress = styled.span`
 `;
 
 type Props = {
-  activities: { text: string; progress: number; timeStamp: string }[];
+  activities: { text: string; progress: number; timeStamp: Date }[];
 };
 
 const ActivityList: React.FC<Props> = ({ activities }) => {
+  // 日付をフォーマットする関数
+  const formatDate = (date: Date): string => {
+    const month = date.getMonth() + 1; // 月は0から始まるため+1
+    const day = date.getDate();
+    const hours = date.getHours();
+    const minutes = date.getMinutes().toString().padStart(2, "0"); // 2桁に揃える
+    return `${month}/${day} ${hours}:${minutes}`;
+  };
+
   return (
     <ListContainer>
       {activities.map((activity, index) => (
         <ListItem key={index}>
           <div>
-            <span>{activity.timeStamp}</span>
+            <span>{formatDate(activity.timeStamp)}</span>
             {activity.text}
           </div>
           <ListItemProgress>{activity.progress}P</ListItemProgress>

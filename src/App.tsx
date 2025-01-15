@@ -35,7 +35,7 @@ const BurstEffect = styled.div<{ visible: boolean }>`
 
 const App: React.FC = () => {
   const [activities, setActivities] = useState<
-    { text: string; progress: number; timeStamp: string }[]
+    { text: string; progress: number; timeStamp: Date }[]
   >([]);
   const [displayProgress, setDisplayProgress] = useState<number>(0);
   const [level, setLevel] = useState<number>(1);
@@ -44,15 +44,6 @@ const App: React.FC = () => {
 
   const getMaxProgress = (level: number): number => {
     return 4 + level; // レベル1で5、レベル2で6...
-  };
-
-  // 日付をフォーマットする関数
-  const formatDate = (date: Date): string => {
-    const month = date.getMonth() + 1; // 月は0から始まるため+1
-    const day = date.getDate();
-    const hours = date.getHours();
-    const minutes = date.getMinutes().toString().padStart(2, "0"); // 2桁に揃える
-    return `${month}/${day} ${hours}:${minutes}`;
   };
 
   const handleAddActivity = (
@@ -88,7 +79,7 @@ const App: React.FC = () => {
     const activity = {
       text: text,
       progress: progress,
-      timeStamp: formatDate(timeStamp),
+      timeStamp: timeStamp,
     };
 
     setActivities([activity, ...activities]);

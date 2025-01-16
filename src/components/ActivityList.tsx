@@ -30,12 +30,15 @@ const ListItemProgress = styled.span`
 `;
 
 type Props = {
-  activities: { text: string; progress: number; timeStamp: Date }[];
+  activities: { text: string; progress: number; timeStamp: string }[];
 };
 
 const ActivityList: React.FC<Props> = ({ activities }) => {
   // 日付をフォーマットする関数
-  const formatDate = (date: Date): string => {
+  const formatDate = (timestamp: string): string => {
+    // Dateオブジェクトに変換
+    const date = new Date(timestamp);
+    // 月日などを取得
     const month = date.getMonth() + 1; // 月は0から始まるため+1
     const day = date.getDate();
     const hours = date.getHours();
@@ -48,7 +51,7 @@ const ActivityList: React.FC<Props> = ({ activities }) => {
       {activities.map((activity, index) => (
         <ListItem key={index}>
           <div>
-            {/* <span>{formatDate(activity.timeStamp)}</span> */}
+            <span>{formatDate(activity.timeStamp)}</span>
             {activity.text}
           </div>
           <ListItemProgress>{activity.progress}P</ListItemProgress>

@@ -27,7 +27,7 @@ const App: React.FC = () => {
   const getSavedActivities = (): {
     text: string;
     progress: number;
-    timeStamp: Date;
+    timeStamp: string;
   }[] => {
     const saved = localStorage.getItem("mornin-activities");
     return saved ? JSON.parse(saved) : [];
@@ -52,7 +52,7 @@ const App: React.FC = () => {
   const handleAddActivity = (
     text: string,
     progress: number,
-    timeStamp: Date
+    timeStamp: string
   ) => {
     const maxProgress = getMaxProgress(level);
     let newProgress = 0;

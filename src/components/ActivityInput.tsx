@@ -43,7 +43,7 @@ const Button = styled.button`
 `;
 
 interface ActivityInputProps {
-  onAddActivity: (activity: string, progress: number, date: Date) => void;
+  onAddActivity: (activity: string, progress: number, date: string) => void;
 }
 
 const ActivityInput: React.FC<ActivityInputProps> = ({ onAddActivity }) => {
@@ -52,7 +52,9 @@ const ActivityInput: React.FC<ActivityInputProps> = ({ onAddActivity }) => {
 
   const handleSubmit = () => {
     if (activity.trim() === "" || progress <= 0) return;
-    onAddActivity(activity, progress, new Date());
+    // localStorageで保存するため文字列として保存しておく
+    const dateString = new Date().toLocaleString();
+    onAddActivity(activity, progress, dateString);
     setActivity("");
     setProgress(1);
   };

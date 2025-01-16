@@ -48,7 +48,7 @@ const ActivityList: React.FC<Props> = ({ activities }) => {
       {activities.map((activity, index) => (
         <ListItem key={index}>
           <div>
-            <span>{formatDate(activity.timeStamp)}</span>
+            {/* <span>{formatDate(activity.timeStamp)}</span> */}
             {activity.text}
           </div>
           <ListItemProgress>{activity.progress}P</ListItemProgress>

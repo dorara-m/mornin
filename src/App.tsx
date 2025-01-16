@@ -23,11 +23,27 @@ const LevelText = styled.div`
 `;
 
 const App: React.FC = () => {
-  const [activities, setActivities] = useState<
-    { text: string; progress: number; timeStamp: Date }[]
-  >([]);
-  const [displayProgress, setDisplayProgress] = useState<number>(0);
-  const [level, setLevel] = useState<number>(1);
+  // ローカルストレージからデータを取得する関数
+  const getSavedActivities = (): {
+    text: string;
+    progress: number;
+    timeStamp: Date;
+  }[] => {
+    const saved = localStorage.getItem("mornin-activities");
+    return saved ? JSON.parse(saved) : [];
+  };
+  const getSavedProgress = (): number => {
+    const saved = localStorage.getItem("mornin-displayProgress");
+    return saved ? Number(saved) : 0;
+  };
+  const getSavedLevel = (): number => {
+    const saved = localStorage.getItem("mornin-level");
+    return saved ? Number(saved) : 1;
+  };
+
+  const [activities, setActivities] = useState(getSavedActivities);
+  const [displayProgress, setDisplayProgress] = useState(getSavedProgress);
+  const [level, setLevel] = useState(getSavedLevel);
 
   const getMaxProgress = (level: number): number => {
     return 4 + level; // レベル1で5、レベル2で6...
@@ -39,27 +55,33 @@ const App: React.FC = () => {
     timeStamp: Date
   ) => {
     const maxProgress = getMaxProgress(level);
-
+    let newProgress = 0;
     if (displayProgress + progress >= maxProgress) {
       // 進捗度がmaxを超えたとき = レベルアップしたとき
-      setDisplayProgress(displayProgress + progress - maxProgress); // 表示上の進捗を調整（次のレベルに持ち越す）
-      setLevel(level + 1); // レベルを1つ上げる
+      newProgress = displayProgress + progress - maxProgress;
+      setDisplayProgress(newProgress); // 表示上の進捗を調整（次のレベルに持ち越す）
+      // レベルアップ
+      const newLevel = level + 1;
+      setLevel(newLevel);
+      localStorage.setItem("mornin-level", newLevel.toString());
 
       // 紙吹雪をトリガー
       triggerConfetti();
     } else {
       // レベルアップしていないとき → いつも通り進捗を加算
-      setDisplayProgress(displayProgress + progress);
+      newProgress = displayProgress + progress;
+      setDisplayProgress(newProgress);
     }
+    localStorage.setItem("mornin-displayProgress", newProgress.toString());
 
-    // このタイミングで日付をフォーマットしてactivitiesに追加
     const activity = {
       text: text,
       progress: progress,
       timeStamp: timeStamp,
     };
-
-    setActivities([activity, ...activities]);
+    const newActivities = [activity, ...activities];
+    setActivities(newActivities);
+    localStorage.setItem("mornin-activities", JSON.stringify(newActivities));
   };
 
   const triggerConfetti = () => {

@@ -84,6 +84,29 @@ const App: React.FC = () => {
     localStorage.setItem("mornin-activities", JSON.stringify(newActivities));
   };
 
+  const handleDeleteActivity = (index: number) => {
+    // 削除するアクティビティを指定
+    const activityToRemove = activities[index];
+    // 削除したいアクティビティの進捗以外をフィルター処理 → 削除された配列ができる
+    const newActivities = activities.filter((_, i) => i !== index);
+    setActivities(newActivities);
+    localStorage.setItem("mornin-activities", JSON.stringify(newActivities));
+
+    // 削除されたアクティビティの進捗値を戻す
+    let newProgress = displayProgress - activityToRemove.progress;
+    // 進捗が負の値になった場合、レベルを減少させる
+    let newLevel = level;
+    while (newProgress < 0 && newLevel > 1) {
+      newLevel -= 1; // レベルを下げる
+      newProgress += getMaxProgress(newLevel); // 前のレベルの最大進捗を追加
+    }
+    // レベルと進捗を更新
+    setDisplayProgress(newProgress >= 0 ? newProgress : 0); // 最小値は0
+    setLevel(newLevel);
+    localStorage.setItem("mornin-displayProgress", newProgress.toString());
+    localStorage.setItem("mornin-level", newLevel.toString());
+  };
+
   const triggerConfetti = () => {
     Confetti({
       origin: { y: 0.7 },
@@ -101,9 +124,12 @@ const App: React.FC = () => {
       <LevelContainer>
         <LevelText>Lv.{level}</LevelText>
       </LevelContainer>
-      <ActivityInput onAddActivity={handleAddActivity} />
       <ProgressBar progress={(displayProgress / getMaxProgress(level)) * 100} />
-      <ActivityList activities={activities} />
+      <ActivityInput onAddActivity={handleAddActivity} />
+      <ActivityList
+        activities={activities}
+        onDeleteActivity={handleDeleteActivity}
+      />
     </div>
   );
 };

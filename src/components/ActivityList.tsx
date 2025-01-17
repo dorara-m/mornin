@@ -4,8 +4,7 @@ import styled from "styled-components";
 const ListContainer = styled.ul`
   list-style: none;
   padding: 0;
-  margin: 1rem auto;
-  width: 90%;
+  margin: 1rem 0;
 `;
 
 const ListItem = styled.li`

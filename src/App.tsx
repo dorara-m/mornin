@@ -5,13 +5,14 @@ import Header from "./components/Header";
 import ActivityInput from "./components/ActivityInput";
 import ProgressBar from "./components/ProgressBar";
 import ActivityList from "./components/ActivityList";
+import Container from "./components/Container";
 
 const LevelContainer = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  height: 50vh;
+  height: 40vh;
   position: relative;
 `;
 
@@ -121,15 +122,19 @@ const App: React.FC = () => {
   return (
     <div>
       <Header />
-      <LevelContainer>
-        <LevelText>Lv.{level}</LevelText>
-      </LevelContainer>
-      <ProgressBar progress={(displayProgress / getMaxProgress(level)) * 100} />
-      <ActivityInput onAddActivity={handleAddActivity} />
-      <ActivityList
-        activities={activities}
-        onDeleteActivity={handleDeleteActivity}
-      />
+      <Container>
+        <LevelContainer>
+          <LevelText>Lv.{level}</LevelText>
+        </LevelContainer>
+        <ProgressBar
+          progress={(displayProgress / getMaxProgress(level)) * 100}
+        />
+        <ActivityInput onAddActivity={handleAddActivity} />
+        <ActivityList
+          activities={activities}
+          onDeleteActivity={handleDeleteActivity}
+        />
+      </Container>
     </div>
   );
 };

@@ -1,18 +1,18 @@
 import React, { useState } from "react";
 import styled from "styled-components";
+import { media } from "../utils/media";
 
 const InputContainer = styled.div`
   display: flex;
-  flex-direction: column;
   align-items: center;
-  margin: 40px;
+  flex-wrap: wrap;
+  margin: 40px 0;
 `;
 
 const TextInput = styled.input`
   padding: 10px;
   font-size: 1rem;
-  margin-bottom: 10px;
-  width: 100%;
+  width: calc(100% - 60px);
   max-width: 400px;
   border: 1px solid #ccc;
   border-radius: 5px;
@@ -21,8 +21,7 @@ const TextInput = styled.input`
 const NumberInput = styled.input`
   padding: 10px;
   font-size: 1rem;
-  margin-bottom: 10px;
-  width: 100%;
+  width: 60px;
   max-width: 400px;
   border: 1px solid #ccc;
   border-radius: 5px;
@@ -36,6 +35,12 @@ const Button = styled.button`
   border: none;
   border-radius: 5px;
   cursor: pointer;
+  width: 100%;
+  margin-top: 10px;
+  ${media.tablet(`
+    width: auto;
+    margin-top: 0;
+  `)}
 
   &:hover {
     background-color: #45a049;
@@ -71,10 +76,9 @@ const ActivityInput: React.FC<ActivityInputProps> = ({ onAddActivity }) => {
         type="number"
         value={progress}
         onChange={(e) => setProgress(Number(e.target.value))}
-        placeholder="進捗度を入力..."
         min="1"
       />
-      <Button onClick={handleSubmit}>送信</Button>
+      <Button onClick={handleSubmit}>GO</Button>
     </InputContainer>
   );
 };

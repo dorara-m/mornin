@@ -5,7 +5,6 @@ const ProgressContainer = styled.div`
   background-color: #ddd;
   border-radius: 20px;
   margin: 1rem auto;
-  width: 90%;
   height: 20px;
 `;
 

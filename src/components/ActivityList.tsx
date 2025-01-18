@@ -1,11 +1,11 @@
 import React from "react";
 import styled from "styled-components";
+import dayjs from "dayjs";
 
 const ListContainer = styled.ul`
   list-style: none;
   padding: 0;
-  margin: 1rem auto;
-  width: 90%;
+  margin: 1rem 0;
 `;
 
 const ListItem = styled.li`
@@ -57,16 +57,8 @@ type Props = {
 };
 
 const ActivityList: React.FC<Props> = ({ activities, onDeleteActivity }) => {
-  // 日付をフォーマットする関数
   const formatDate = (timestamp: string): string => {
-    // Dateオブジェクトに変換
-    const date = new Date(timestamp);
-    // 月日などを取得
-    const month = date.getMonth() + 1; // 月は0から始まるため+1
-    const day = date.getDate();
-    const hours = date.getHours();
-    const minutes = date.getMinutes().toString().padStart(2, "0"); // 2桁に揃える
-    return `${month}/${day} ${hours}:${minutes}`;
+    return dayjs(timestamp).format("M/D H:mm");
   };
 
   return (

@@ -12,6 +12,7 @@ const ListItem = styled.li`
   background-color: #f9f9f9;
   margin: 0.5rem 0;
   padding: 0.5rem 1rem;
+  padding-right: 2.5rem;
   font-size: 1.1rem;
   border: 1px solid #ddd;
   border-radius: 4px;

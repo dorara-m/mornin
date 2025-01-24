@@ -12,6 +12,7 @@ const ListItem = styled.li`
   background-color: #f9f9f9;
   margin: 0.5rem 0;
   padding: 0.5rem 1rem;
+  padding-right: 2.5rem;
   font-size: 1.1rem;
   border: 1px solid #ddd;
   border-radius: 4px;
@@ -56,25 +57,52 @@ type Props = {
   onDeleteActivity: (index: number) => void;
 };
 
+const DateHeader = styled.h3`
+  margin: 1.5rem 0 0.5rem;
+  color: #666;
+  font-size: 1rem;
+`;
+
 const ActivityList: React.FC<Props> = ({ activities, onDeleteActivity }) => {
   const formatDate = (timestamp: string): string => {
     return dayjs(timestamp).format("M/D H:mm");
   };
 
+  const formatDateHeader = (timestamp: string): string => {
+    return dayjs(timestamp).format("M/D");
+  };
+
+  // アクティビティを日付でグループ化
+  const groupedActivities = activities.reduce((groups, activity) => {
+    const date = dayjs(activity.timeStamp).format("YYYY-MM-DD");
+    if (!groups[date]) {
+      groups[date] = [];
+    }
+    groups[date].push(activity);
+    return groups;
+  }, {} as { [key: string]: typeof activities });
+
   return (
     <ListContainer>
-      {activities.map((activity, index) => (
-        <ListItem key={index}>
-          <ListItemProgress>{activity.progress}P</ListItemProgress>
-          <div>
-            {activity.text}
-            <ListItemDate>{formatDate(activity.timeStamp)}</ListItemDate>
-          </div>
-          <DeleteButton onClick={() => onDeleteActivity(index)}>
-            ー
-          </DeleteButton>
-        </ListItem>
-      ))}
+      {Object.entries(groupedActivities)
+        .sort(([dateA], [dateB]) => (dateB < dateA ? -1 : 1))
+        .map(([date, dateActivities]) => (
+          <React.Fragment key={date}>
+            <DateHeader>{formatDateHeader(date)}</DateHeader>
+            {dateActivities.map((activity, index) => (
+              <ListItem key={`${date}-${index}`}>
+                <ListItemProgress>{activity.progress}P</ListItemProgress>
+                <div>
+                  {activity.text}
+                  <ListItemDate>{formatDate(activity.timeStamp)}</ListItemDate>
+                </div>
+                <DeleteButton onClick={() => onDeleteActivity(index)}>
+                  ー
+                </DeleteButton>
+              </ListItem>
+            ))}
+          </React.Fragment>
+        ))}
     </ListContainer>
   );
 };

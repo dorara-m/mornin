@@ -133,6 +133,7 @@ const App: React.FC = () => {
         <ActivityList
           activities={activities}
           onDeleteActivity={handleDeleteActivity}
+          level={level}
         />
       </Container>
     </div>

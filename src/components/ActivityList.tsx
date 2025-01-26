@@ -53,18 +53,47 @@ const DeleteButton = styled.button`
   }
 `;
 
-type Props = {
-  activities: { text: string; progress: number; timeStamp: string }[];
-  onDeleteActivity: (index: number) => void;
-};
-
+const DateHeaderContainer = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  margin: 1rem 0;
+`;
 const DateHeader = styled.h3`
-  margin: 1.5rem 0 0.5rem;
+  margin: 0;
   color: #666;
-  font-size: 1rem;
+  font-size: 1.1rem;
+`;
+const CopyButton = styled.button`
+  background-color: #f0f0f0;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  padding: 0 0.8rem;
+  height: 2rem;
+  font-size: 0.8rem;
+  cursor: pointer;
+  transition: background-color 0.3s;
+
+  &:hover {
+    background-color: #e0e0e0;
+  }
 `;
 
-const ActivityList: React.FC<Props> = ({ activities, onDeleteActivity }) => {
+interface Props {
+  activities: {
+    text: string;
+    progress: number;
+    timeStamp: string;
+  }[];
+  onDeleteActivity: (index: number) => void;
+  level: number;
+}
+
+const ActivityList: React.FC<Props> = ({
+  activities,
+  onDeleteActivity,
+  level,
+}) => {
   const formatDate = (timestamp: string): string => {
     return dayjs(timestamp).format("M/D H:mm");
   };
@@ -83,13 +112,41 @@ const ActivityList: React.FC<Props> = ({ activities, onDeleteActivity }) => {
     return groups;
   }, {} as { [key: string]: typeof activities });
 
+  // 日付ごとのアクティビティをクリップボードにコピー
+  const copyDayActivities = (
+    activities: (typeof groupedActivities)[string]
+  ) => {
+    const totalPoints = activities.reduce(
+      (sum, activity) => sum + activity.progress,
+      0
+    );
+
+    const text = `本日の朝活\n${activities
+      .map((activity) => `+${activity.progress} ${activity.text}`)
+      .join("\n")}\n合計 ${totalPoints}点\n\n朝活Lv. ${level}`;
+
+    navigator.clipboard
+      .writeText(text)
+      .then(() => {
+        alert("以下をクリップボードにコピーしました\n\n" + text);
+      })
+      .catch((err) => {
+        console.error("コピーに失敗しました:", err);
+      });
+  };
+
   return (
     <ListContainer>
       {Object.entries(groupedActivities)
         .sort(([dateA], [dateB]) => (dateB < dateA ? -1 : 1))
         .map(([date, dateActivities]) => (
           <React.Fragment key={date}>
-            <DateHeader>{formatDateHeader(date)}</DateHeader>
+            <DateHeaderContainer>
+              <DateHeader>{formatDateHeader(date)}</DateHeader>
+              <CopyButton onClick={() => copyDayActivities(dateActivities)}>
+                アクティビティをコピー
+              </CopyButton>
+            </DateHeaderContainer>
             {dateActivities.map((activity, index) => (
               <ListItem key={`${date}-${index}`}>
                 <ListItemProgress>{activity.progress}P</ListItemProgress>

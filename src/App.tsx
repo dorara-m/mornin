@@ -6,6 +6,7 @@ import ActivityInput from "./components/ActivityInput";
 import ProgressBar from "./components/ProgressBar";
 import ActivityList from "./components/ActivityList";
 import Container from "./components/Container";
+import UserForm from "./components/UserForm";
 
 const LevelContainer = styled.div`
   display: flex;
@@ -21,6 +22,42 @@ const LevelText = styled.div`
   font-weight: bold;
   color: #4caf50;
   position: relative;
+`;
+
+const UserInfo = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 1rem;
+`;
+
+const UserIconContainer = styled.div`
+  position: relative;
+  width: 150px;
+  height: 150px;
+`;
+
+const UserIcon = styled.img`
+  width: 100%;
+  height: 100%;
+  border-radius: 8px;
+  object-fit: cover;
+`;
+
+const LevelBadge = styled.div`
+  position: absolute;
+  bottom: 8px;
+  right: 8px;
+  background: rgba(0, 0, 0, 0.7);
+  color: white;
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-size: 0.9rem;
+  font-weight: bold;
+`;
+
+const Username = styled.div`
+  font-size: 1.5rem;
 `;
 
 const App: React.FC = () => {
@@ -45,6 +82,13 @@ const App: React.FC = () => {
   const [activities, setActivities] = useState(getSavedActivities);
   const [displayProgress, setDisplayProgress] = useState(getSavedProgress);
   const [level, setLevel] = useState(getSavedLevel);
+  const [username, setUsername] = useState(
+    localStorage.getItem("mornin-username") || ""
+  );
+  const [userIcon, setUserIcon] = useState(
+    localStorage.getItem("mornin-userIcon") || ""
+  );
+  const [showUserForm, setShowUserForm] = useState(!username || !userIcon);
 
   const getMaxProgress = (level: number): number => {
     return 4 + level; // レベル1で5、レベル2で6...
@@ -119,22 +163,50 @@ const App: React.FC = () => {
     });
   };
 
+  const getDefaultIconUrl = (username: string) => {
+    const firstChar = username.charAt(0) || "ぬ";
+    return `https://placehold.jp/80/3e703e/ffffff/150x150.png?text=${encodeURIComponent(
+      firstChar
+    )}`;
+  };
+
+  const handleUserSubmit = (newUsername: string, newIcon: string) => {
+    const iconUrl = newIcon.trim() || getDefaultIconUrl(newUsername);
+    setUsername(newUsername);
+    setUserIcon(iconUrl);
+    localStorage.setItem("mornin-username", newUsername);
+    localStorage.setItem("mornin-userIcon", iconUrl);
+    setShowUserForm(false);
+  };
+
   return (
     <div>
       <Header />
       <Container>
-        <LevelContainer>
-          <LevelText>Lv.{level}</LevelText>
-        </LevelContainer>
-        <ProgressBar
-          progress={(displayProgress / getMaxProgress(level)) * 100}
-        />
-        <ActivityInput onAddActivity={handleAddActivity} />
-        <ActivityList
-          activities={activities}
-          onDeleteActivity={handleDeleteActivity}
-          level={level}
-        />
+        {showUserForm ? (
+          <UserForm onSubmit={handleUserSubmit} />
+        ) : (
+          <>
+            <LevelContainer>
+              <UserInfo>
+                <UserIconContainer>
+                  <UserIcon src={userIcon} alt={username} />
+                  <LevelBadge>Lv.{level}</LevelBadge>
+                </UserIconContainer>
+                <Username>{username}</Username>
+              </UserInfo>
+            </LevelContainer>
+            <ProgressBar
+              progress={(displayProgress / getMaxProgress(level)) * 100}
+            />
+            <ActivityInput onAddActivity={handleAddActivity} />
+            <ActivityList
+              activities={activities}
+              onDeleteActivity={handleDeleteActivity}
+              level={level}
+            />
+          </>
+        )}
       </Container>
     </div>
   );

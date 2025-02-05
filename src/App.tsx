@@ -13,22 +13,8 @@ const LevelContainer = styled.div`
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  height: 40vh;
   position: relative;
-`;
-
-const LevelText = styled.div`
-  font-size: 5rem;
-  font-weight: bold;
-  color: #4caf50;
-  position: relative;
-`;
-
-const UserInfo = styled.div`
-  display: flex;
-  align-items: center;
-  gap: 1rem;
-  margin-bottom: 1rem;
+  margin-top: 2rem;
 `;
 
 const UserIconContainer = styled.div`
@@ -40,24 +26,27 @@ const UserIconContainer = styled.div`
 const UserIcon = styled.img`
   width: 100%;
   height: 100%;
-  border-radius: 8px;
+  border-radius: 50%;
   object-fit: cover;
 `;
 
-const LevelBadge = styled.div`
+const LevelText = styled.div`
+  margin-top: 1rem;
+  font-size: 3.5rem;
+  font-weight: bold;
+  color: #4caf50;
+`;
+
+const Username = styled.div`
   position: absolute;
   bottom: 8px;
-  right: 8px;
+  right: -16px;
   background: rgba(0, 0, 0, 0.7);
-  color: white;
+  color: #fff;
   padding: 4px 8px;
   border-radius: 4px;
   font-size: 0.9rem;
   font-weight: bold;
-`;
-
-const Username = styled.div`
-  font-size: 1.5rem;
 `;
 
 const App: React.FC = () => {
@@ -164,7 +153,7 @@ const App: React.FC = () => {
   };
 
   const getDefaultIconUrl = (username: string) => {
-    const firstChar = username.charAt(0) || "ぬ";
+    const firstChar = username.charAt(0) || "未設定";
     return `https://placehold.jp/80/3e703e/ffffff/150x150.png?text=${encodeURIComponent(
       firstChar
     )}`;
@@ -188,13 +177,11 @@ const App: React.FC = () => {
         ) : (
           <>
             <LevelContainer>
-              <UserInfo>
-                <UserIconContainer>
-                  <UserIcon src={userIcon} alt={username} />
-                  <LevelBadge>Lv.{level}</LevelBadge>
-                </UserIconContainer>
+              <UserIconContainer>
+                <UserIcon src={userIcon} alt={username} />
                 <Username>{username}</Username>
-              </UserInfo>
+              </UserIconContainer>
+              <LevelText>Lv.{level}</LevelText>
             </LevelContainer>
             <ProgressBar
               progress={(displayProgress / getMaxProgress(level)) * 100}

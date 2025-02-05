@@ -1,6 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 import dayjs from "dayjs";
+import ContentCopyIcon from "@mui/icons-material/ContentCopy";
 
 const ListContainer = styled.ul`
   list-style: none;
@@ -24,9 +25,8 @@ const ListItem = styled.li`
 const ListItemDate = styled.span`
   font-size: 0.8rem;
   color: #999;
-  margin-left: 0.5rem;
+  margin-left: 1rem;
   display: inline-block;
-  width: 5rem;
   text-align: center;
 `;
 const ListItemProgress = styled.span`
@@ -55,9 +55,8 @@ const DeleteButton = styled.button`
 
 const DateHeaderContainer = styled.div`
   display: flex;
-  justify-content: space-between;
   align-items: flex-end;
-  margin: 1rem 0;
+  margin: 2rem 0 1rem;
 `;
 const DateHeader = styled.h3`
   margin: 0;
@@ -65,14 +64,16 @@ const DateHeader = styled.h3`
   font-size: 1.1rem;
 `;
 const CopyButton = styled.button`
+  margin-left: 1rem;
   background-color: #f0f0f0;
   border: 1px solid #ddd;
   border-radius: 4px;
-  padding: 0 0.8rem;
-  height: 2rem;
-  font-size: 0.8rem;
+  padding: 0.2rem 0.6rem;
   cursor: pointer;
   transition: background-color 0.3s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 
   &:hover {
     background-color: #e0e0e0;
@@ -95,7 +96,7 @@ const ActivityList: React.FC<Props> = ({
   level,
 }) => {
   const formatDate = (timestamp: string): string => {
-    return dayjs(timestamp).format("M/D H:mm");
+    return dayjs(timestamp).format("H:mm");
   };
 
   const formatDateHeader = (timestamp: string): string => {
@@ -144,7 +145,7 @@ const ActivityList: React.FC<Props> = ({
             <DateHeaderContainer>
               <DateHeader>{formatDateHeader(date)}</DateHeader>
               <CopyButton onClick={() => copyDayActivities(dateActivities)}>
-                アクティビティをコピー
+                <ContentCopyIcon sx={{ fontSize: 16, color: "#666" }} />
               </CopyButton>
             </DateHeaderContainer>
             {dateActivities.map((activity, index) => (

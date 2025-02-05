@@ -4,7 +4,7 @@ import styled from "styled-components";
 const ProgressContainer = styled.div`
   background-color: #ddd;
   border-radius: 20px;
-  margin: 1rem auto;
+  margin-top: 2rem;
   height: 20px;
 `;
 

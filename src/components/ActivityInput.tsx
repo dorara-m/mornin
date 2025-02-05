@@ -126,7 +126,7 @@ const ActivityInput: React.FC<ActivityInputProps> = ({ onAddActivity }) => {
         type="text"
         value={activity}
         onChange={(e) => setActivity(e.target.value)}
-        placeholder="朝活内容を入力..."
+        placeholder="今日の朝活内容を入力..."
       />
       <NumberInputContainer>
         <DecrementButton onClick={handleDecrement} disabled={progress <= 1}>

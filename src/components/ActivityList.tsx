@@ -2,11 +2,30 @@ import React from "react";
 import styled from "styled-components";
 import dayjs from "dayjs";
 import ContentCopyIcon from "@mui/icons-material/ContentCopy";
+import DeleteIcon from "@mui/icons-material/Delete";
 
 const ListContainer = styled.ul`
   list-style: none;
   padding: 0;
   margin: 1rem 0;
+`;
+
+const DeleteButton = styled.button`
+  position: absolute;
+  right: 0.5rem;
+  background-color: #999;
+  color: white;
+  border: none;
+  font-weight: bold;
+  border-radius: 50%;
+  width: 25px;
+  height: 25px;
+  cursor: pointer;
+  transition: all 0.3s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
 `;
 
 const ListItem = styled.li`
@@ -21,6 +40,10 @@ const ListItem = styled.li`
   align-items: center;
   font-weight: bold;
   position: relative;
+
+  &:hover ${DeleteButton} {
+    opacity: 1;
+  }
 `;
 const ListItemDate = styled.span`
   font-size: 0.8rem;
@@ -34,23 +57,6 @@ const ListItemProgress = styled.span`
   font-size: 0.9rem;
   font-weight: bold;
   color: green;
-`;
-const DeleteButton = styled.button`
-  position: absolute;
-  right: 0.5rem;
-  background-color: #999;
-  color: white;
-  border: none;
-  font-weight: bold;
-  border-radius: 50%;
-  width: 25px;
-  height: 25px;
-  cursor: pointer;
-  transition: background-color 0.3s;
-
-  &:hover {
-    background-color: #666;
-  }
 `;
 
 const DateHeaderContainer = styled.div`
@@ -156,7 +162,7 @@ const ActivityList: React.FC<Props> = ({
                   <ListItemDate>{formatDate(activity.timeStamp)}</ListItemDate>
                 </div>
                 <DeleteButton onClick={() => onDeleteActivity(index)}>
-                  ー
+                  <DeleteIcon sx={{ fontSize: 20 }} />
                 </DeleteButton>
               </ListItem>
             ))}

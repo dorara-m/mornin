@@ -2,7 +2,7 @@ import React from "react";
 import styled from "styled-components";
 import dayjs from "dayjs";
 import ContentCopyIcon from "@mui/icons-material/ContentCopy";
-import DeleteIcon from "@mui/icons-material/Delete";
+import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
 
 const ListContainer = styled.ul`
   list-style: none;
@@ -13,18 +13,10 @@ const ListContainer = styled.ul`
 const DeleteButton = styled.button`
   position: absolute;
   right: 0.5rem;
-  background-color: #999;
-  color: white;
   border: none;
-  font-weight: bold;
-  border-radius: 50%;
-  width: 25px;
-  height: 25px;
+  background: transparent;
   cursor: pointer;
-  transition: all 0.3s;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  transition: all 0.2s;
   opacity: 0;
 `;
 
@@ -162,7 +154,7 @@ const ActivityList: React.FC<Props> = ({
                   <ListItemDate>{formatDate(activity.timeStamp)}</ListItemDate>
                 </div>
                 <DeleteButton onClick={() => onDeleteActivity(index)}>
-                  <DeleteIcon sx={{ fontSize: 20 }} />
+                  <DeleteForeverIcon sx={{ fontSize: 24 }} />
                 </DeleteButton>
               </ListItem>
             ))}

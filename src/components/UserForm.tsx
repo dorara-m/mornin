@@ -44,6 +44,18 @@ const UserForm: React.FC<UserFormProps> = ({ onSubmit }) => {
   const [username, setUsername] = useState("");
   const [icon, setIcon] = useState("");
 
+  const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        const base64String = reader.result as string;
+        setIcon(base64String);
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (username.trim()) {
@@ -61,15 +73,17 @@ const UserForm: React.FC<UserFormProps> = ({ onSubmit }) => {
           onChange={(e) => setUsername(e.target.value)}
           required
         />
-        <Input
-          type="text"
-          placeholder="アイコン画像URL（空も可）"
-          value={icon}
-          onChange={(e) => setIcon(e.target.value)}
-        />
+        <Input type="file" accept="image/*" onChange={handleImageUpload} />
         <p style={{ fontSize: "1rem", color: "#666" }}>
-          ※アイコン画像urlは完全に公開されているurl（自分のサイトなど）でないと読み込めません。自信がなければ空にしてください。今後画像を自由にアップロードできるようにしますのでしばらくお待ち下さい。。
+          ※画像ファイルを選択してください。以下にプレビューされます
         </p>
+        {icon && (
+          <img
+            src={icon}
+            alt="プレビュー"
+            style={{ maxWidth: "200px", marginTop: "1rem" }}
+          />
+        )}
         <Button type="submit">保存</Button>
       </Form>
     </FormContainer>

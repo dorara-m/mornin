@@ -152,19 +152,11 @@ const App: React.FC = () => {
     });
   };
 
-  const getDefaultIconUrl = (username: string) => {
-    const firstChar = username.charAt(0) || "未設定";
-    return `https://placehold.jp/80/3e703e/ffffff/150x150.png?text=${encodeURIComponent(
-      firstChar
-    )}`;
-  };
-
   const handleUserSubmit = (newUsername: string, newIcon: string) => {
-    const iconUrl = newIcon.trim() || getDefaultIconUrl(newUsername);
     setUsername(newUsername);
-    setUserIcon(iconUrl);
+    setUserIcon(newIcon);
     localStorage.setItem("mornin-username", newUsername);
-    localStorage.setItem("mornin-userIcon", iconUrl);
+    localStorage.setItem("mornin-userIcon", newIcon);
     setShowUserForm(false);
   };
 

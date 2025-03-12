@@ -7,6 +7,7 @@ import ProgressBar from "./components/ProgressBar";
 import ActivityList from "./components/ActivityList";
 import Container from "./components/Container";
 import UserForm from "./components/UserForm";
+import EditIcon from "@mui/icons-material/Edit";
 
 const LevelContainer = styled.div`
   display: flex;
@@ -47,6 +48,31 @@ const Username = styled.div`
   border-radius: 4px;
   font-size: 0.9rem;
   font-weight: bold;
+`;
+
+const EditButton = styled.button`
+  position: absolute;
+  top: 0;
+  right: -40px;
+  background: #4caf50;
+  color: white;
+  border: none;
+  border-radius: 50%;
+  width: 32px;
+  height: 32px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+
+  &:hover {
+    background: #45a049;
+  }
+
+  & svg {
+    font-size: 18px;
+  }
 `;
 
 const App: React.FC = () => {
@@ -152,19 +178,19 @@ const App: React.FC = () => {
     });
   };
 
-  const getDefaultIconUrl = (username: string) => {
-    const firstChar = username.charAt(0) || "未設定";
-    return `https://placehold.jp/80/3e703e/ffffff/150x150.png?text=${encodeURIComponent(
-      firstChar
-    )}`;
+  const handleUserSubmit = (newUsername: string, newIcon: string) => {
+    setUsername(newUsername);
+    setUserIcon(newIcon);
+    localStorage.setItem("mornin-username", newUsername);
+    localStorage.setItem("mornin-userIcon", newIcon);
+    setShowUserForm(false);
   };
 
-  const handleUserSubmit = (newUsername: string, newIcon: string) => {
-    const iconUrl = newIcon.trim() || getDefaultIconUrl(newUsername);
-    setUsername(newUsername);
-    setUserIcon(iconUrl);
-    localStorage.setItem("mornin-username", newUsername);
-    localStorage.setItem("mornin-userIcon", iconUrl);
+  const handleEditUser = () => {
+    setShowUserForm(true);
+  };
+
+  const handleCancelEdit = () => {
     setShowUserForm(false);
   };
 
@@ -173,13 +199,21 @@ const App: React.FC = () => {
       <Header />
       <Container>
         {showUserForm ? (
-          <UserForm onSubmit={handleUserSubmit} />
+          <UserForm
+            onSubmit={handleUserSubmit}
+            onCancel={handleCancelEdit}
+            initialUsername={username}
+            initialIcon={userIcon}
+          />
         ) : (
           <>
             <LevelContainer>
               <UserIconContainer>
                 <UserIcon src={userIcon} alt={username} />
                 <Username>{username}</Username>
+                <EditButton onClick={handleEditUser}>
+                  <EditIcon />
+                </EditButton>
               </UserIconContainer>
               <LevelText>Lv.{level}</LevelText>
             </LevelContainer>

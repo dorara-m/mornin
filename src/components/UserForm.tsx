@@ -1,8 +1,9 @@
 import React, { useState } from "react";
 import styled from "styled-components";
+import ArrowBackIosIcon from "@mui/icons-material/ArrowBackIos";
 
 const FormContainer = styled.div`
-  margin: 5rem 0;
+  margin: 2rem 0;
   padding: 2rem;
   background: white;
   border-radius: 8px;
@@ -23,26 +24,67 @@ const Input = styled.input`
 `;
 
 const Button = styled.button`
-  padding: 0.5rem 1rem;
+  padding: 0.5rem 2rem;
   background: #4caf50;
   color: white;
   border: none;
   border-radius: 4px;
   cursor: pointer;
   font-size: 1rem;
+  margin-left: auto;
 
   &:hover {
     background: #45a049;
   }
 `;
 
+const CancelButton = styled.button`
+  margin-top: 3rem;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  font-size: 16px;
+  display: flex;
+  align-items: center;
+  svg {
+    font-size: 20px;
+  }
+  &:hover {
+    background: transparent;
+    color: #45a049;
+    svg {
+      color: #45a049;
+    }
+  }
+`;
+
 interface UserFormProps {
   onSubmit: (username: string, icon: string) => void;
+  onCancel?: () => void;
+  initialUsername?: string;
+  initialIcon?: string;
 }
 
-const UserForm: React.FC<UserFormProps> = ({ onSubmit }) => {
-  const [username, setUsername] = useState("");
-  const [icon, setIcon] = useState("");
+const UserForm: React.FC<UserFormProps> = ({
+  onSubmit,
+  onCancel,
+  initialUsername = "",
+  initialIcon = "",
+}) => {
+  const [username, setUsername] = useState(initialUsername);
+  const [icon, setIcon] = useState(initialIcon);
+
+  const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        const base64String = reader.result as string;
+        setIcon(base64String);
+      };
+      reader.readAsDataURL(file);
+    }
+  };
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -52,27 +94,43 @@ const UserForm: React.FC<UserFormProps> = ({ onSubmit }) => {
   };
 
   return (
-    <FormContainer>
-      <Form onSubmit={handleSubmit}>
-        <Input
-          type="text"
-          placeholder="ユーザー名※必須"
-          value={username}
-          onChange={(e) => setUsername(e.target.value)}
-          required
-        />
-        <Input
-          type="text"
-          placeholder="アイコン画像URL（空も可）"
-          value={icon}
-          onChange={(e) => setIcon(e.target.value)}
-        />
-        <p style={{ fontSize: "1rem", color: "#666" }}>
-          ※アイコン画像urlは完全に公開されているurl（自分のサイトなど）でないと読み込めません。自信がなければ空にしてください。今後画像を自由にアップロードできるようにしますのでしばらくお待ち下さい。。
-        </p>
-        <Button type="submit">保存</Button>
-      </Form>
-    </FormContainer>
+    <div>
+      {onCancel && (
+        <CancelButton type="button" onClick={onCancel}>
+          <ArrowBackIosIcon />
+          <span>Back</span>
+        </CancelButton>
+      )}
+      <FormContainer>
+        <Form onSubmit={handleSubmit}>
+          <Input
+            type="text"
+            placeholder="ユーザー名"
+            value={username}
+            onChange={(e) => setUsername(e.target.value)}
+            required
+          />
+          <Input type="file" accept="image/*" onChange={handleImageUpload} />
+          <p style={{ fontSize: "1rem", color: "#666", margin: "0" }}>
+            ※正方形の画像を選択してください
+            <br />
+            ↓画像プレビュー
+          </p>
+          {icon && (
+            <img
+              src={icon}
+              alt="プレビュー"
+              style={{
+                maxWidth: "150px",
+                borderRadius: "50%",
+              }}
+            />
+          )}
+
+          <Button type="submit">保存</Button>
+        </Form>
+      </FormContainer>
+    </div>
   );
 };
 
